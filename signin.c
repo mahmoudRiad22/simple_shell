@@ -18,14 +18,14 @@ void _signIn_(__attribute__((unused))int sig_num)
 /**
  * _CheckChain_ - checks we should continue chaining based on last status
  * @info: the parameter struct
- * @buf: the char buffer
+ * @b: the char buffer
  * @p: address of current position in buf
  * @i: starting position in buf
- * @len: length of buf
+ * @l: length of buf
  *
  * Return: Void
  */
-void _CheckChain_(information_t *info, char *buf, size_t *p, size_t i, size_t len)
+void _CheckChain_(information_t *info, char *b, size_t *p, size_t i, size_t l)
 {
 	size_t j = *p;
 
@@ -33,16 +33,16 @@ void _CheckChain_(information_t *info, char *buf, size_t *p, size_t i, size_t le
 	{
 		if (info->status)
 		{
-			buf[i] = 0;
-			j = len;
+			b[i] = 0;
+			j = l;
 		}
 	}
 	if (info->cmd_buf_type == CMD_OR)
 	{
 		if (!info->status)
 		{
-			buf[i] = 0;
-			j = len;
+			b[i] = 0;
+			j = l;
 		}
 	}
 

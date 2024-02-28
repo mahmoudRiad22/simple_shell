@@ -185,4 +185,8 @@ void _CheckChain_(information_t *, char *, size_t *, size_t, size_t);
 int _Replace_A_(information_t *);
 int _Repalce_V_(information_t *);
 int _Replace_S_(char **, char *);
+int _UnsetAlias_(information_t *info, char *str);
+int _SetAlias_(information_t *info, char *str);
+int _PrintAlias_(list_t *node);
+ssize_t _ReadBuff_(information_t *info, char *buf, size_t *i);
 #endif

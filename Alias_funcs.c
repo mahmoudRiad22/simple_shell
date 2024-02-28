@@ -1,5 +1,6 @@
 #include "shell.h"
 
+
 /**
  * _Alias_ - mimics the alias builtin (man alias)
  * @info: Structure containing potential arguments. Used to maintain
@@ -17,7 +18,7 @@ int _Alias_(information_t *info)
 		node = info->alias;
 		while (node)
 		{
-			print_alias(node);
+			_PrintAlias_(node);
 			node = node->next;
 		}
 		return (0);
@@ -26,9 +27,9 @@ int _Alias_(information_t *info)
 	{
 		p = _StrChar_(info->argv[i], '=');
 		if (p)
-			set_alias(info, info->argv[i]);
+			_SetAlias_(info, info->argv[i]);
 		else
-			print_alias(_NodeStartWith_(info->alias, info->argv[i], '='));
+			_PrintAlias_(_NodeStartWith_(info->alias, info->argv[i], '='));
 	}
 
 	return (0);
@@ -36,12 +37,12 @@ int _Alias_(information_t *info)
 
 
 /**
- * print_alias - prints an alias string
+ * _PrintAlias_ - prints an alias string
  * @node: the alias node
  *
  * Return: Always 0 on success, 1 on error
  */
-int print_alias(list_t *node)
+int _PrintAlias_(list_t *node)
 {
 	char *p = NULL, *a = NULL;
 
@@ -60,13 +61,13 @@ int print_alias(list_t *node)
 
 
 /**
- * set_alias - sets alias to string
+ * _SetAlias_ - sets alias to string
  * @info: parameter struct
  * @str: the string alias
  *
  * Return: Always 0 on success, 1 on error
  */
-int set_alias(information_t *info, char *str)
+int _SetAlias_(information_t *info, char *str)
 {
 	char *p;
 
@@ -74,22 +75,22 @@ int set_alias(information_t *info, char *str)
 	if (!p)
 		return (1);
 	if (!*++p)
-		return (unset_alias(info, str));
+		return (_UnsetAlias_(info, str));
 
-	unset_alias(info, str);
+	_UnsetAlias_(info, str);
 	return (_AddNodeAtEnd_(&(info->alias), str, 0) == NULL);
 }
 
 
 
 /**
- * unset_alias - sets alias to string
+ * _UnsetAlias_ - sets alias to string
  * @info: parameter struct
  * @str: the string alias
  *
  * Return: Always 0 on success, 1 on error
  */
-int unset_alias(information_t *info, char *str)
+int _UnsetAlias_(information_t *info, char *str)
 {
 	char *p, c;
 	int ret;
@@ -104,6 +105,7 @@ int unset_alias(information_t *info, char *str)
 	*p = c;
 	return (ret);
 }
+
 
 
 

@@ -114,7 +114,7 @@ int _GetLine_(information_t *info, char **ptr, size_t *length)
 	if (i == len)
 		i = len = 0;
 
-	r = read_buf(info, buf, &len);
+	r = _ReadBuff_(info, buf, &len);
 	if (r == -1 || (r == 0 && len == 0))
 		return (-1);
 
@@ -141,14 +141,14 @@ int _GetLine_(information_t *info, char **ptr, size_t *length)
 
 
 /**
- * read_buf - reads a buffer
+ * _ReadBuff_ - reads a buffer
  * @info: parameter struct
  * @buf: buffer
  * @i: size
  *
  * Return: r
  */
-ssize_t read_buf(information_t *info, char *buf, size_t *i)
+ssize_t _ReadBuff_(information_t *info, char *buf, size_t *i)
 {
 	ssize_t r = 0;
 
@@ -159,4 +159,5 @@ ssize_t read_buf(information_t *info, char *buf, size_t *i)
 		*i = r;
 	return (r);
 }
+
 
