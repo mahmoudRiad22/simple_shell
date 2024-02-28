@@ -2,12 +2,12 @@
 
 /**
  *_Is_Alpha_ - checks for alphabetic character
- *@c: The character to input
- *Return: 1 if c is alphabetic, 0 otherwise
+ *@_char: The character to input
+ *Return: 1 if char is alphabetic, 0 else
  */
-int _Is_Alpha_(int c)
+int _Is_Alpha_(int _char)
 {
-	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+	if ((_char >= 'a' && _char <= 'z') || (_char >= 'A' && _char <= 'Z'))
 		return (1);
 	else
 		return (0);
@@ -15,14 +15,14 @@ int _Is_Alpha_(int c)
 
 /**
  * _Is_delimeter_ - checks if character is a delimeter
- * @c: the char to check
- * @delim: the delimeter string
+ * @ch: the char to check
+ * @delimeter: the delimeter string
  * Return: 1 if true, 0 if false
  */
-int _Is_delimeter_(char c, char *delim)
+int _Is_delimeter_(char ch, char *delimeter)
 {
-	while (*delim)
-		if (*delim++ == c)
+	while (*delimeter)
+		if (*delimeter++ == ch)
 			return (1);
 	return (0);
 }
@@ -36,13 +36,13 @@ int _Is_delimeter_(char c, char *delim)
  */
 int _Is_CMD_(information_t *info, char *path)
 {
-	struct stat st;
+	struct stat _stat_;
 
 	(void)info;
-	if (!path || stat(path, &st))
+	if (!path || stat(path, &_stat_))
 		return (0);
 
-	if (st.st_mode & S_IFREG)
+	if (_stat_.st_mode & S_IFREG)
 	{
 		return (1);
 	}
@@ -52,35 +52,35 @@ int _Is_CMD_(information_t *info, char *path)
 /**
  * _Is_Chain_ - test if current char in buffer is a chain delimeter
  * @info: the parameter struct
- * @buf: the char buffer
- * @p: address of current position in buf
+ * @buffer: the char buffer
+ * @add: address of current position in buf
  *
  * Return: 1 if chain delimeter, 0 otherwise
  */
-int _Is_Chain_(information_t *info, char *buf, size_t *p)
+int _Is_Chain_(information_t *info, char *buffer, size_t *add)
 {
-	size_t j = *p;
+	size_t copy = *add;
 
-	if (buf[j] == '|' && buf[j + 1] == '|')
+	if (buffer[copy] == '|' && buffer[copy + 1] == '|')
 	{
-		buf[j] = 0;
-		j++;
+		buffer[copy] = 0;
+		copy++;
 		info->cmd_buf_type = CMD_OR;
 	}
-	else if (buf[j] == '&' && buf[j + 1] == '&')
+	else if (buffer[copy] == '&' && buffer[copy + 1] == '&')
 	{
-		buf[j] = 0;
-		j++;
+		buffer[copy] = 0;
+		copy++;
 		info->cmd_buf_type = CMD_AND;
 	}
-	else if (buf[j] == ';') /* found end of this command */
+	else if (buffer[copy] == ';')
 	{
-		buf[j] = 0; /* replace semicolon with null */
+		buffer[copy] = 0;
 		info->cmd_buf_type = CMD_CHAIN;
 	}
 	else
 		return (0);
-	*p = j;
+	*add = copy;
 	return (1);
 }
 

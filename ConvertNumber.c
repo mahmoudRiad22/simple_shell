@@ -36,105 +36,107 @@ int _AtoI_(char *s)
 
 
 /**
- * _PrintInt_ - function prints a decimal (integer) number (base 10)
+ * _PrintInt_ - function prints an integer
  * @input: the input
- * @fd: the filedescriptor to write to
+ * @file_des: the filedescriptor to write to
  *
  * Return: number of characters printed
  */
-int _PrintInt_(int input, int fd)
+int _PrintInt_(int input, int file_des)
 {
-	int (*__putchar)(char) = _putchar;
-	int i, count = 0;
-	unsigned int _abs_, current;
+	int (*_putchar_)(char) = _putchar;
+	int i, counter = 0;
+	unsigned int num_value, current;
 
-	if (fd == STDERR_FILENO)
-		__putchar = _Error_putchar_;
+	if (file_des == STDERR_FILENO)
+		_putchar_ = _Error_putchar_;
 	if (input < 0)
 	{
-		_abs_ = -input;
-		__putchar('-');
-		count++;
+		num_value = -input;
+		_putchar_('-');
+		counter++;
 	}
 	else
-		_abs_ = input;
-	current = _abs_;
+		num_value = input;
+	current = num_value;
 	for (i = 1000000000; i > 1; i /= 10)
 	{
-		if (_abs_ / i)
+		if (num_value / i)
 		{
-			__putchar('0' + current / i);
-			count++;
+			_putchar_('0' + current / i);
+			counter++;
 		}
 		current %= i;
 	}
-	__putchar('0' + current);
-	count++;
+	_putchar_('0' + current);
+	counter++;
 
-	return (count);
+	return (counter);
 }
 
 
 
 /**
  * _ConvertNumber_ - converter function, a clone of itoa
- * @num: number
+ * @number: number
  * @base: base
  * @flags: argument flags
  *
  * Return: string
  */
-char *_ConvertNumber_(long int num, int base, int flags)
+char *_ConvertNumber_(long int number, int base, int flags)
 {
-	static char *array;
-	static char buffer[50];
-	char sign = 0;
+	static char *Array;
+	static char Buffer[50];
+	char minus_sign = 0;
 	char *ptr;
-	unsigned long n = num;
+	unsigned long num = number;
 
-	if (!(flags & CONVERT_UNSIGNED) && num < 0)
+	if (!(flags & CONVERT_UNSIGNED) && number < 0)
 	{
-		n = -num;
-		sign = '-';
+		num = -number;
+		minus_sign = '-';
 
 	}
-	array = flags & CONVERT_LOWERCASE ? "0123456789abcdef" : "0123456789ABCDEF";
-	ptr = &buffer[49];
+	Array = flags & CONVERT_LOWERCASE ? "0123456789abcdef" : "0123456789ABCDEF";
+	ptr = &Buffer[49];
 	*ptr = '\0';
 
 	do	{
-		*--ptr = array[n % base];
-		n /= base;
-	} while (n != 0);
+		*--ptr = Array[num % base];
+		num /= base;
+	} while (num != 0);
 
-	if (sign)
-		*--ptr = sign;
+	if (minus_sign)
+		*--ptr = minus_sign;
 	return (ptr);
 }
 
 
 /**
- * _chars_dup_ - duplicates characters
- * @pathstr: the PATH string
+ * _chars_dup_ - replicate characters
+ * 
+ * @strpath: the PATH string
  * @start: starting index
  * @stop: stopping index
  *
  * Return: pointer to new buffer
  */
-char *_chars_dup_(char *pathstr, int start, int stop)
+char *_chars_dup_(char *strpath, int start, int stop)
 {
-	static char buf[1024];
+	static char buffer[1024];
 	int i = 0, k = 0;
 
 	for (k = 0, i = start; i < stop; i++)
-		if (pathstr[i] != ':')
-			buf[k++] = pathstr[i];
-	buf[k] = 0;
-	return (buf);
+		if (strpath[i] != ':')
+			buffer[k++] = strpath[i];
+	buffer[k] = 0;
+	return (buffer);
 }
 
 /**
  * _StartWith_ - checks if needle starts with haystack
+ * 
  * @haystack: string to search
  * @needle: the substring to find
  *
@@ -143,8 +145,10 @@ char *_chars_dup_(char *pathstr, int start, int stop)
 char *_StartWith_(const char *haystack, const char *needle)
 {
 	while (*needle)
+
 		if (*needle++ != *haystack++)
 			return (NULL);
+	
 	return ((char *)haystack);
 }
 
