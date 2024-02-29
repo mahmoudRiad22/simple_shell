@@ -18,7 +18,7 @@ int _CD_(information_t *info)
 	{
 		dirctory = _GetEnv_(info, "HOME=");
 		if (!dirctory)
-			ch_dir_return = /* TODO: what should this be? */
+			ch_dir_return =
 				chdir((dirctory = _GetEnv_(info, "PWD=")) ? dirctory : "/");
 		else
 			ch_dir_return = chdir(dirctory);
@@ -32,7 +32,7 @@ int _CD_(information_t *info)
 			return (1);
 		}
 		_puts(_GetEnv_(info, "OLDPWD=")), _putchar('\n');
-		ch_dir_return = /* TODO: what should this be? */
+		ch_dir_return =
 			chdir((dirctory = _GetEnv_(info, "OLDPWD=")) ? dirctory : "/");
 	}
 	else
@@ -53,15 +53,15 @@ int _CD_(information_t *info)
 
 /**
  * _FindBuildIn_ - search for a builtin command
- * 
+ *
  * @info: the parameter & return info struct
  *
  * Return: 1 if  found but not successful, -1 if  not found,
- *			0 if  executed successfully, -2 if signals exit()
+ *		0 if  executed successfully, -2 if signals exit()
  */
 int _FindBuildIn_(information_t *info)
 {
-	int i, return_value = -1;
+	int i, _return_value = -1;
 	BuildIn_t buildInTable[] = {
 		{"exit", _Exit_},
 		{"env", _Env_},
@@ -75,21 +75,21 @@ int _FindBuildIn_(information_t *info)
 	};
 
 	for (i = 0; buildInTable[i].type; i++)
-    {
+	{
 		if (_strCMP_(info->argv[0], buildInTable[i].type) == 0)
 		{
 			info->line_count++;
-			return_value = buildInTable[i].func(info);
+			_return_value = buildInTable[i].func(info);
 			break;
 		}
-    }
-	return (return_value);
+	}
+	return (_return_value);
 }
 
 
 /**
  * _Find_cmd_ - finds a command in PATH
- * 
+ *
  * @info: the parameter & return info struct
  *
  * Return: void
@@ -134,7 +134,7 @@ void _Find_cmd_(information_t *info)
 
 /**
  * _Fork_cmd_ - forks an exec thread to run cmd
- * 
+ *
  * @info: the parameter & return info struct
  *
  * Return: void

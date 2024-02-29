@@ -10,7 +10,7 @@
 int _Alias_(information_t *info)
 {
 	list_t *node = NULL;
-    char *p = NULL;
+	char *p = NULL;
 	int index = 0;
 
 	if (info->argc == 1)
@@ -52,13 +52,13 @@ int _PrintAlias_(list_t *node)
 
 		for (current = node->str; current <= address; current++)
 			_putchar(*current);
-		
-        _putchar('\'');
+
+		_putchar('\'');
 		_puts(address + 1);
 		_puts("'\n");
 		return (0);
 	}
-    
+
 	return (1);
 }
 
@@ -77,18 +77,19 @@ int _SetAlias_(information_t *info, char *string)
 
 	if (!pointer)
 		return (1);
-	
-    if (!*++pointer)
+
+	if (!*++pointer)
 		return (_UnsetAlias_(info, string));
 
 	_UnsetAlias_(info, string);
-	
-    return (_AddNodeAtEnd_(&(info->alias), string, 0) == NULL);
+
+	return (_AddNodeAtEnd_(&(info->alias), string, 0) == NULL);
 }
 
 
 /**
  * _UnsetAlias_ - sets alias to string
+ *
  * @info: parameter struct
  * @string: the string alias
  *
@@ -105,8 +106,8 @@ int _UnsetAlias_(information_t *info, char *string)
 		return (1);
 	c = *p;
 	*p = 0;
-	
-    ret = _DelNodeAtIndex_(&(info->alias),
+
+	ret = _DelNodeAtIndex_(&(info->alias),
 		_GetNodeIndex_(info->alias, _NodeStartWith_(info->alias, string, -1)));
 	*p = c;
 	return (ret);

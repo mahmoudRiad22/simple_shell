@@ -115,7 +115,7 @@ char *_ConvertNumber_(long int number, int base, int flags)
 
 /**
  * _chars_dup_ - replicate characters
- * 
+ *
  * @strpath: the PATH string
  * @start: starting index
  * @stop: stopping index
@@ -136,7 +136,7 @@ char *_chars_dup_(char *strpath, int start, int stop)
 
 /**
  * _StartWith_ - checks if needle starts with haystack
- * 
+ *
  * @haystack: string to search
  * @needle: the substring to find
  *
@@ -148,7 +148,7 @@ char *_StartWith_(const char *haystack, const char *needle)
 
 		if (*needle++ != *haystack++)
 			return (NULL);
-	
+
 	return ((char *)haystack);
 }
 

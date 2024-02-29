@@ -12,7 +12,7 @@ int _Exit_(information_t *info)
 	int Exit_Check;
 
 	if (info->argv[1])
-    {
+	{
 		Exit_Check = _ErrAtoI_(info->argv[1]);
 
 		if (Exit_Check == -1)
@@ -25,7 +25,7 @@ int _Exit_(information_t *info)
 		}
 
 		info->err_num = _ErrAtoI_(info->argv[1]);
-        
+
 		return (-2);
 	}
 	info->err_num = -1;
