@@ -2,27 +2,24 @@
 
 
 /**
- * **strtow - splits a string into words. Repeat delimiters are ignored
+ * **strtow2 - splits a string into words
  *
- * @w: the input string
- * @d: the delimeter string
+ * @str: the input string
+ * @d: the delimeter
  *
- * Return: a pointer to array_strings, or NULL otherwise
+ * Return: a pointer to an array of strings, or NULL on failure
  */
-
-char **strtow(char *w, char *d)
+char **strtow2(char *str, char d)
 {
 	int i, j, k, m, numwords = 0;
 	char **s;
 
-	if (w == NULL || w[0] == 0)
+	if (str == NULL || str[0] == 0)
 		return (NULL);
-	if (!d)
-		d = " ";
-	for (i = 0; w[i] != '\0'; i++)
-		if (!_Is_delimeter_(w[i], d) && (_Is_delimeter_(w[i + 1], d) || !w[i + 1]))
+	for (i = 0; str[i] != '\0'; i++)
+		if ((str[i] != d && str[i + 1] == d) ||
+		    (str[i] != d && !str[i + 1]) || str[i + 1] == d)
 			numwords++;
-
 	if (numwords == 0)
 		return (NULL);
 	s = malloc((1 + numwords) * sizeof(char *));
@@ -30,10 +27,10 @@ char **strtow(char *w, char *d)
 		return (NULL);
 	for (i = 0, j = 0; j < numwords; j++)
 	{
-		while (_Is_delimeter_(w[i], d))
+		while (str[i] == d && str[i] != d)
 			i++;
 		k = 0;
-		while (!_Is_delimeter_(w[i + k], d) && w[i + k])
+		while (str[i + k] != d && str[i + k] && str[i + k] != d)
 			k++;
 		s[j] = malloc((k + 1) * sizeof(char));
 		if (!s[j])
@@ -44,11 +41,10 @@ char **strtow(char *w, char *d)
 			return (NULL);
 		}
 		for (m = 0; m < k; m++)
-			s[j][m] = w[i++];
+			s[j][m] = str[i++];
 		s[j][m] = 0;
 	}
 	s[j] = NULL;
 	return (s);
 }
-
 

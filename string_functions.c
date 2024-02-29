@@ -3,6 +3,7 @@
 
 /**
  * _strlen_ - returns the length of a string
+ *
  * @s: the string whose length to check
  *
  * Return: integer length of string
@@ -21,6 +22,7 @@ int _strlen_(char *s)
 
 /**
  * _StrCat_ - concatenates two strings
+ *
  * @dest: the destination buffer
  * @src: the source buffer
  *
@@ -40,6 +42,7 @@ char *_StrCat_(char *dest, char *src)
 
 /**
  * _StrCpy_ - copies a string
+ *
  * @dest: the destination
  * @src: the source
  *
@@ -62,6 +65,7 @@ char *_StrCpy_(char *dest, char *src)
 
 /**
  * _StrDup_ - duplicates a string
+ *
  * @str: the string to duplicate
  *
  * Return: pointer to the duplicated string
@@ -84,23 +88,27 @@ char *_StrDup_(const char *str)
 }
 
 /**
- * _strCMP_ - performs lexicogarphic comparison of two strangs.
- * @s1: the first strang
- * @s2: the second strang
+ * _strCMP_ - performs comparison on two strangs.
  *
- * Return: negative if s1 < s2, positive if s1 > s2, zero if s1 == s2
+ * @string1: the first strang
+ * @string2: the second strang
+ *
+ * Return:	-ev if string1 < string2,
+ *		+ev if string1 > string2,
+ *		0 if string1 == string2
  */
-int _strCMP_(char *s1, char *s2)
+int _strCMP_(char *string1, char *string2)
 {
-	while (*s1 && *s2)
+	while (*string1 && *string2)
 	{
-		if (*s1 != *s2)
-			return (*s1 - *s2);
-		s1++;
-		s2++;
+		if (*string1 != *string2)
+			return (*string1 - *string2);
+		string1++;
+		string2++;
 	}
-	if (*s1 == *s2)
+	if (*string1 == *string2)
 		return (0);
 	else
-		return (*s1 < *s2 ? -1 : 1);
+		return (*string1 < *string2 ? -1 : 1);
 }
+

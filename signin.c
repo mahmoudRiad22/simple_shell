@@ -2,6 +2,7 @@
 
 /**
  * _signIn_ - blocks ctrl-C
+ *
  * @sig_num: the signal number
  *
  * Return: void
@@ -16,16 +17,17 @@ void _signIn_(__attribute__((unused))int sig_num)
 
 
 /**
- * _CheckChain_ - checks we should continue chaining based on last status
- * @info: the parameter struct
- * @b: the char buffer
+ * _CheckChain_ - checks if we continue chains or not
+ *
+ * @info: information struct
+ * @B: the char B
  * @p: address of current position in buf
  * @i: starting position in buf
  * @l: length of buf
  *
  * Return: Void
  */
-void _CheckChain_(information_t *info, char *b, size_t *p, size_t i, size_t l)
+void _CheckChain_(information_t *info, char *B, size_t *p, size_t i, size_t l)
 {
 	size_t j = *p;
 
@@ -33,7 +35,7 @@ void _CheckChain_(information_t *info, char *b, size_t *p, size_t i, size_t l)
 	{
 		if (info->status)
 		{
-			b[i] = 0;
+			B[i] = 0;
 			j = l;
 		}
 	}
@@ -41,7 +43,7 @@ void _CheckChain_(information_t *info, char *b, size_t *p, size_t i, size_t l)
 	{
 		if (!info->status)
 		{
-			b[i] = 0;
+			B[i] = 0;
 			j = l;
 		}
 	}
@@ -53,18 +55,19 @@ void _CheckChain_(information_t *info, char *b, size_t *p, size_t i, size_t l)
 
 /**
  * _FindPath_ - finds this cmd in the PATH string
- * @info: the info struct
- * @pathstr: the PATH string
+ *
+ * @info: information struct
+ * @PATH: the PATH string
  * @cmd: the cmd to find
  *
  * Return: full path of cmd if found or NULL
  */
-char *_FindPath_(information_t *info, char *pathstr, char *cmd)
+char *_FindPath_(information_t *info, char *PATH, char *cmd)
 {
-	int i = 0, curr_pos = 0;
+	int counter = 0, currentPosition = 0;
 	char *path;
 
-	if (!pathstr)
+	if (!PATH)
 		return (NULL);
 	if ((_strlen_(cmd) > 2) && _StartWith_(cmd, "./"))
 	{
@@ -73,9 +76,9 @@ char *_FindPath_(information_t *info, char *pathstr, char *cmd)
 	}
 	while (1)
 	{
-		if (!pathstr[i] || pathstr[i] == ':')
+		if (!PATH[counter] || PATH[counter] == ':')
 		{
-			path = _chars_dup_(pathstr, curr_pos, i);
+			path = _chars_dup_(PATH, currentPosition, counter);
 			if (!*path)
 				_StrCat_(path, cmd);
 			else
@@ -85,11 +88,11 @@ char *_FindPath_(information_t *info, char *pathstr, char *cmd)
 			}
 			if (_Is_CMD_(info, path))
 				return (path);
-			if (!pathstr[i])
+			if (!PATH[counter])
 				break;
-			curr_pos = i;
+			currentPosition = counter;
 		}
-		i++;
+		counter++;
 	}
 	return (NULL);
 }
@@ -97,12 +100,13 @@ char *_FindPath_(information_t *info, char *pathstr, char *cmd)
 
 /**
  *_PutsFD_ - prints an input string
+ *
  * @str: the string to be printed
- * @fd: the filedescriptor to write to
+ * @file_desc: the filedescriptor to write to
  *
  * Return: the number of chars put
  */
-int _PutsFD_(char *str, int fd)
+int _PutsFD_(char *str, int file_desc)
 {
 	int i = 0;
 
@@ -110,7 +114,7 @@ int _PutsFD_(char *str, int fd)
 		return (0);
 	while (*str)
 	{
-		i += _PutFD_(*str++, fd);
+		i += _PutFD_(*str++, file_desc);
 	}
 	return (i);
 }
@@ -119,21 +123,22 @@ int _PutsFD_(char *str, int fd)
 
 /**
  * _RemoveComments_ - function replaces first instance of '#' with '\0'
- * @buf: address of the string to modify
+ * @buffer: address of the string to modify
  *
  * Return: Always 0;
  */
-void _RemoveComments_(char *buf)
+void _RemoveComments_(char *buffer)
 {
 	int i;
 
-	for (i = 0; buf[i] != '\0'; i++)
-		if (buf[i] == '#' && (!i || buf[i - 1] == ' '))
+	for (i = 0; buffer[i] != '\0'; i++)
+		if (buffer[i] == '#' && (!i || buffer[i - 1] == ' '))
 		{
-			buf[i] = '\0';
+			buffer[i] = '\0';
 			break;
 		}
 }
+
 
 
 

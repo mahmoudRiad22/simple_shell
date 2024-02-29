@@ -3,6 +3,7 @@
 
 /**
  * Interactive_Mode - returns true if shell is interactive mode
+ *
  * @info: struct address
  *
  * Return: 1 if interactive mode, 0 otherwise
@@ -31,6 +32,7 @@ int hsh(information_t *info, char **av)
 			_puts("$ ");
 		_Error_putchar_(BUF_FLUSH);
 		r = _GetInput_(info);
+
 		if (r != -1)
 		{
 			_SetInfo_(info, av);
@@ -42,10 +44,13 @@ int hsh(information_t *info, char **av)
 			_putchar('\n');
 		_FreeInfo_(info, 0);
 	}
+
 	_WriteHistory_(info);
 	_FreeInfo_(info, 1);
+
 	if (!Interactive_Mode(info) && info->status)
 		exit(info->status);
+
 	if (builtin_ret == -2)
 	{
 		if (info->err_num == -1)
@@ -54,5 +59,6 @@ int hsh(information_t *info, char **av)
 	}
 	return (builtin_ret);
 }
+
 
 
