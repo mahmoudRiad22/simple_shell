@@ -1,44 +1,44 @@
 #include "shell.h"
 
 /**
- * input_buf - buffers chained commands
+ * input_buf - add commands to buffer
+ *
  * @info: parameter struct
- * @buf: address of buffer
- * @len: address of len var
+ * @buffer: address of buffer
+ * @buffer_len: address of buffer_len var
  *
  * Return: bytes read
  */
-ssize_t input_buf(information_t *info, char **buf, size_t *len)
+ssize_t input_buf(information_t *info, char **buffer, size_t *buffer_len)
 {
 	ssize_t r = 0;
 	size_t len_p = 0;
 
-	if (!*len) /* if nothing left in the buffer, fill it */
+	if (!*buffer_len)
 	{
-		/*_BufferFree_((void **)info->cmd_buf);*/
-		free(*buf);
-		*buf = NULL;
+		free(*buffer);
+		*buffer = NULL;
 		signal(SIGINT, _signIn_);
 #if USE_GETLINE
-		r = getline(buf, &len_p, stdin);
+		r = getline(buffer, &len_p, stdin);
 #else
-		r = _GetLine_(info, buf, &len_p);
+		r = _GetLine_(info, buffer, &len_p);
 #endif
 		if (r > 0)
 		{
-			if ((*buf)[r - 1] == '\n')
+			if ((*buffer)[r - 1] == '\n')
 			{
-				(*buf)[r - 1] = '\0'; /* remove trailing newline */
+				(*buffer)[r - 1] = '\0';
 				r--;
 			}
+
 			info->linecount_flag = 1;
-			_RemoveComments_(*buf);
-			_BuildHistory_L_(info, *buf, info->histcount++);
-			/* if (_StrChar_(*buf, ';')) is this a command chain? */
-			{
-				*len = r;
-				info->cmd_buf = buf;
-			}
+
+			_RemoveComments_(*buffer);
+			_BuildHistory_L_(info, *buffer, info->histcount++);
+
+			*buffer_len = r;
+			info->cmd_buf = buffer;
 		}
 	}
 	return (r);
@@ -48,47 +48,48 @@ ssize_t input_buf(information_t *info, char **buf, size_t *len)
 
 /**
  * _GetInput_ - gets a line minus the newline
+ *
  * @info: parameter struct
  *
  * Return: bytes read
  */
 ssize_t _GetInput_(information_t *info)
 {
-	static char *buf; /* the ';' command chain buffer */
-	static size_t i, j, len;
 	ssize_t r = 0;
-	char **buf_p = &(info->arg), *p;
+	static size_t i, j, len;
+	char **buf_p = &(info->arg), *ptr;
+	static char *buffer;
 
 	_putchar(BUF_FLUSH);
-	r = input_buf(info, &buf, &len);
-	if (r == -1) /* EOF */
+	r = input_buf(info, &buffer, &len);
+	if (r == -1)
 		return (-1);
-	if (len)	/* we have commands left in the chain buffer */
+	if (len)
 	{
-		j = i; /* init new iterator to current buf position */
-		p = buf + i; /* get pointer for return */
+		j = i;
+		ptr = buffer + i;
 
-		_CheckChain_(info, buf, &j, i, len);
-		while (j < len) /* iterate to semicolon or end */
+		_CheckChain_(info, buffer, &j, i, len);
+		while (j < len)
 		{
-			if (_Is_Chain_(info, buf, &j))
+			if (_Is_Chain_(info, buffer, &j))
 				break;
 			j++;
 		}
 
-		i = j + 1; /* increment past nulled ';'' */
-		if (i >= len) /* reached end of buffer? */
+		i = j + 1;
+		if (i >= len)
 		{
-			i = len = 0; /* reset position and length */
+			i = len = 0;
 			info->cmd_buf_type = CMD_NORM;
 		}
 
-		*buf_p = p; /* pass back pointer to current command position */
-		return (_strlen_(p)); /* return length of current command */
+		*buf_p = ptr;
+		return (_strlen_(ptr));
 	}
 
-	*buf_p = buf; /* else not a chain, pass back buffer from _GetLine_() */
-	return (r); /* return length of buffer from _GetLine_() */
+	*buf_p = buffer;
+	return (r);
 }
 
 
@@ -102,51 +103,51 @@ ssize_t _GetInput_(information_t *info)
  */
 int _GetLine_(information_t *info, char **ptr, size_t *length)
 {
-	static char buf[READ_BUF_SIZE];
+	static char buffer[READ_BUF_SIZE];
 	static size_t i, len;
 	size_t k;
 	ssize_t r = 0, s = 0;
-	char *p = NULL, *new_p = NULL, *c;
+	char *ptr = NULL, *new_ptr = NULL, *c;
 
-	p = *ptr;
-	if (p && length)
+	ptr = *ptr;
+	if (ptr && length)
 		s = *length;
 	if (i == len)
 		i = len = 0;
 
-	r = _ReadBuff_(info, buf, &len);
+	r = _ReadBuff_(info, buffer, &len);
 	if (r == -1 || (r == 0 && len == 0))
 		return (-1);
 
-	c = _StrChar_(buf + i, '\n');
-	k = c ? 1 + (unsigned int)(c - buf) : len;
-	new_p = _Realloc_(p, s, s ? s + k : k + 1);
-	if (!new_p) /* MALLOC FAILURE! */
-		return (p ? free(p), -1 : -1);
+	c = _StrChar_(buffer + i, '\n');
+	k = c ? 1 + (unsigned int)(c - buffer) : len;
+	new_ptr = _Realloc_(ptr, s, s ? s + k : k + 1);
+	if (!new_ptr) /* MALLOC FAILURE! */
+		return (ptr ? free(ptr), -1 : -1);
 
 	if (s)
-		_StrnCat_(new_p, buf + i, k - i);
+		_StrnCat_(new_ptr, buffer + i, k - i);
 	else
-		_StrnCpy_(new_p, buf + i, k - i + 1);
+		_StrnCpy_(new_ptr, buffer + i, k - i + 1);
 
 	s += k - i;
 	i = k;
-	p = new_p;
+	ptr = new_ptr;
 
 	if (length)
 		*length = s;
-	*ptr = p;
+	*ptr = ptr;
 	return (s);
 }
 
 
 /**
  * _ReadBuff_ - reads a buffer
- * @info: parameter struct
+ * @info: information struct
  * @buf: buffer
  * @i: size
  *
- * Return: r
+ * Return: bytes read
  */
 ssize_t _ReadBuff_(information_t *info, char *buf, size_t *i)
 {
@@ -154,10 +155,14 @@ ssize_t _ReadBuff_(information_t *info, char *buf, size_t *i)
 
 	if (*i)
 		return (0);
+
 	r = read(info->readfd, buf, READ_BUF_SIZE);
+
 	if (r >= 0)
 		*i = r;
+
 	return (r);
 }
+
 
 
