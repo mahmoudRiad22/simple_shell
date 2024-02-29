@@ -1,5 +1,6 @@
 #include "shell.h"
 
+
 /**
  * main - entry point
  * @argc: arg count
@@ -11,7 +12,8 @@ int main(int argc, char **argv)
 {
 	information_t info[] = { INFO_INIT };
 	int file_d = 2;
-
+	/*that code moves the value of file_d into a register*/
+	/*then adds exactly 3 to it*/
 	asm ("mov %1, %0\n\t"
 		"add $3, %0"
 		: "=r" (file_d)
@@ -42,3 +44,4 @@ int main(int argc, char **argv)
 	hsh(info, argv);
 	return (EXIT_SUCCESS);
 }
+

@@ -2,6 +2,7 @@
 
 /**
  * _DelNodeAtIndex_ - deletes node at given index
+ *
  * @head: address of pointer to first node
  * @index: index of node to delete
  *
@@ -42,6 +43,7 @@ int _DelNodeAtIndex_(list_t **head, unsigned int index)
 
 /**
  * _FreeList_ - frees all nodes of a list
+ *
  * @head_ptr: address of pointer to head node
  *
  * Return: void
@@ -67,20 +69,21 @@ void _FreeList_(list_t **head_ptr)
 
 
 /**
- * _PrintListStrings_ - prints only the str element of a list_t linked list
- * @h: pointer to first node
+ * _PrintListStrings_ - prints only the str element of a linked list
+ *
+ * @head: pointer to first node
  *
  * Return: size of list
  */
-size_t _PrintListStrings_(const list_t *h)
+size_t _PrintListStrings_(const list_t *head)
 {
 	size_t i = 0;
 
-	while (h)
+	while (head)
 	{
-		_puts(h->str ? h->str : "(nil)");
+		_puts(head->str ? head->str : "(nil)");
 		_puts("\n");
-		h = h->next;
+		head = head->next;
 		i++;
 	}
 	return (i);
@@ -88,7 +91,8 @@ size_t _PrintListStrings_(const list_t *h)
 
 
 /**
- * _GetNodeIndex_ - gets the index of a node
+ * _GetNodeIndex_ - gets the index of a given node
+ *
  * @head: pointer to list head
  * @node: pointer to the node
  *
@@ -113,7 +117,8 @@ ssize_t _GetNodeIndex_(list_t *head, list_t *node)
 
 
 /**
- * _ListToString_ - returns an array of strings of the list->str
+ * _ListToString_ - returns an array of strings from given list struct
+ *
  * @head: pointer to first node
  *
  * Return: array of strings
@@ -127,9 +132,12 @@ char **_ListToString_(list_t *head)
 
 	if (!head || !i)
 		return (NULL);
+
 	strs = malloc(sizeof(char *) * (i + 1));
+
 	if (!strs)
 		return (NULL);
+
 	for (i = 0; node; node = node->next, i++)
 	{
 		str = malloc(_strlen_(node->str) + 1);
@@ -144,9 +152,11 @@ char **_ListToString_(list_t *head)
 		str = _StrCpy_(str, node->str);
 		strs[i] = str;
 	}
+
 	strs[i] = NULL;
 	return (strs);
 }
+
 
 
 
