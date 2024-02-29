@@ -36,7 +36,6 @@ ssize_t input_buf(information_t *info, char **buffer, size_t *buffer_len)
 
 			_RemoveComments_(*buffer);
 			_BuildHistory_L_(info, *buffer, info->histcount++);
-
 			*buffer_len = r;
 			info->cmd_buf = buffer;
 		}
@@ -107,10 +106,10 @@ int _GetLine_(information_t *info, char **ptr, size_t *length)
 	static size_t i, len;
 	size_t k;
 	ssize_t r = 0, s = 0;
-	char *ptr = NULL, *new_ptr = NULL, *c;
+	char *p = NULL, *new_p = NULL, *c;
 
-	ptr = *ptr;
-	if (ptr && length)
+	p = *ptr;
+	if (p && length)
 		s = *length;
 	if (i == len)
 		i = len = 0;
@@ -121,22 +120,22 @@ int _GetLine_(information_t *info, char **ptr, size_t *length)
 
 	c = _StrChar_(buffer + i, '\n');
 	k = c ? 1 + (unsigned int)(c - buffer) : len;
-	new_ptr = _Realloc_(ptr, s, s ? s + k : k + 1);
-	if (!new_ptr) /* MALLOC FAILURE! */
-		return (ptr ? free(ptr), -1 : -1);
+	new_p = _Realloc_(p, s, s ? s + k : k + 1);
+	if (!new_p) /* MALLOC FAILURE! */
+		return (p ? free(p), -1 : -1);
 
 	if (s)
-		_StrnCat_(new_ptr, buffer + i, k - i);
+		_StrnCat_(new_p, buffer + i, k - i);
 	else
-		_StrnCpy_(new_ptr, buffer + i, k - i + 1);
+		_StrnCpy_(new_p, buffer + i, k - i + 1);
 
 	s += k - i;
 	i = k;
-	ptr = new_ptr;
+	p = new_p;
 
 	if (length)
 		*length = s;
-	*ptr = ptr;
+	*ptr = p;
 	return (s);
 }
 
